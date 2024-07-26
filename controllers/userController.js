@@ -2,7 +2,12 @@ const User = require('../models/User');
 
 const express = require('express');
 
-exports.login = function () {};
+exports.login = function (req, res) {
+  let user = new User(req.body);
+  user.login(function(result){
+    res.send(result);
+  });
+};
 
 exports.logout = (req, res) => {};
 

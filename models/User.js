@@ -24,6 +24,16 @@ User.prototype.cleanUp = function () {
   };
 };
 
+User.prototype.login = async function(callback) {
+  this.cleanUp();
+  const attemptedUser = await usersCollection.findOne({username: this.data.username})
+    if(attemptedUser && attemptedUser.password == this.data.password){
+      callback('Congratsss!');
+    }else{
+      callback('Invalid username/password');
+    }
+};
+
 User.prototype.validate = function () {
   if (this.data.username == '') {
     this.errors.push('You must provided a username.');

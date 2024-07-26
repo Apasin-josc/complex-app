@@ -14,6 +14,4 @@ app.set('view engine', 'ejs');
 
 app.use('/', router);
 
-app.listen(port, () => {
-  console.log(`your server is running on the port: ${port}`);
-});
+module.exports = app;

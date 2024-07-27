@@ -24,14 +24,18 @@ User.prototype.cleanUp = function () {
   };
 };
 
-User.prototype.login = async function(callback) {
-  this.cleanUp();
-  const attemptedUser = await usersCollection.findOne({username: this.data.username})
-    if(attemptedUser && attemptedUser.password == this.data.password){
-      callback('Congratsss!');
-    }else{
-      callback('Invalid username/password');
+User.prototype.login = function () {
+  return new Promise(async (resolve, reject) => {
+    this.cleanUp();
+    const attemptedUser = await usersCollection.findOne({
+      username: this.data.username,
+    });
+    if (attemptedUser && attemptedUser.password == this.data.password) {
+      resolve('Congratsss!');
+    } else {
+      reject('Invalid username/password');
     }
+  });
 };
 
 User.prototype.validate = function () {
@@ -69,7 +73,7 @@ User.prototype.register = function () {
   this.validate();
   //step #2: only if there are no validation errors then save the user data
   //into our database 🫵
-  if(!this.errors.length){
+  if (!this.errors.length) {
     //creating a new document
     usersCollection.insertOne(this.data);
   }

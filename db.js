@@ -6,7 +6,7 @@ const client = new MongoClient(process.env.CONNECTIONSTRING);
 
 async function start(){
     await client.connect();
-    module.exports = client.db();
+    module.exports = client;
     const app = require('./app');
     app.listen(process.env.PORT, () => {
         console.log(`your app is connected to the database and is running on port: ${process.env.PORT} 👋🤠`);

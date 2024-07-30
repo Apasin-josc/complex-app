@@ -7,6 +7,7 @@ exports.login = function (req, res) {
   user
     .login()
     .then(function (result) {
+      req.session.user = {favColor: 'orange', username: user.data.username}
       res.send(result);
     })
     .catch(function (e) {
@@ -28,5 +29,9 @@ exports.register = (req, res) => {
 };
 
 exports.home = (req, res) => {
-  res.render('home-guest');
+  if(req.session.user){
+    res.render('home-dashboard', {username: req.session.user.username});
+  }else{
+    res.render('home-guest');
+  }
 };

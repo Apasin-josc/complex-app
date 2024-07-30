@@ -31,7 +31,12 @@ exports.register = (req, res) => {
   user.register();
   //if there's a error it's going to be pushed into our page
   if (user.errors.length) {
-    res.send(user.errors);
+    user.errors.forEach(function(error) {
+      req.flash('regErrors', error);
+    });
+    req.session.save(function () {
+      res.redirect('/');
+    });
   } else {
     res.send('congrats, there are no errors buddy!');
   }
@@ -41,6 +46,6 @@ exports.home = (req, res) => {
   if(req.session.user){
     res.render('home-dashboard', {username: req.session.user.username});
   }else{
-    res.render('home-guest', {errors: req.flash('errors')});
+    res.render('home-guest', {errors: req.flash('errors'), regErrors: req.flash('regErrors')});
   }
 };

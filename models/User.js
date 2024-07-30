@@ -39,7 +39,7 @@ User.prototype.login = function () {
   });
 };
 
-User.prototype.validate = function () {
+User.prototype.validate = async function () {
   if (this.data.username == '') {
     this.errors.push('You must provided a username.');
   }
@@ -67,7 +67,20 @@ User.prototype.validate = function () {
   if (this.data.username.length > 100) {
     this.errors.push('your user cannot exceed 20 characters');
   }
+
+  //only if username is valid then check to see if its already taken
+  if(this.data.username.length > 2 && this.data.username.length < 31 && validator.isAlphanumeric(this.data.username)){
+    let usernameExists = await usersCollection.findOne({username: this.data.username});
+    if(usernameExists){this.errors.push('That username is already taken.')}
+  }
+
+  //only if email is valid then check to see if its already taken
+  if(validator.isEmail(this.data.email)){
+    let emailExists = await usersCollection.findOne({email: this.data.email});
+    if(emailExists){this.errors.push('That email is already being used')};
+  }
 };
+
 User.prototype.register = function () {
   //step #1: validate user data
   this.cleanUp();

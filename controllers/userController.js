@@ -7,15 +7,21 @@ exports.login = function (req, res) {
   user
     .login()
     .then(function (result) {
-      req.session.user = {favColor: 'orange', username: user.data.username}
-      res.send(result);
+      req.session.user = {favColor: 'orange', username: user.data.username};
+      req.session.save(function (){
+        res.redirect('/');
+      });
     })
     .catch(function (e) {
       res.send(e);
     });
 };
 
-exports.logout = (req, res) => {};
+exports.logout = (req, res) => {
+  req.session.destroy(function () {
+    res.redirect('/');
+  });
+};
 
 exports.register = (req, res) => {
   let user = new User(req.body);
